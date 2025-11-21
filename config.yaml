@@ -1,0 +1,33 @@
+paths:
+  rgb_dir: ./RGB
+  dsm_dir: ./DSM
+  labels_dir: ./Labels
+  aoi_path: ./AOI/AOIs_project.gpkg
+  output_dir: ./Output
+  coco_dir: ./coco
+  label_aggregations: ./Labels/label_aggregations.gpkg
+  label_aggregations_layer: output
+
+tile:
+  size: 1024
+  overlap_ratio: 0.5
+  min_aoi_ratio: 0.2
+  min_tree_ratio: 0.2
+
+processing:
+  splits: [train, val, test]
+  processes: 4
+  skip_existing: false
+  max_tiles_per_site: null  # set to an integer to cap tiles during dry-runs
+  site_whitelist: []        # e.g. ['cbblackburn1']
+  compression: lzw
+  label_field: species
+  label_fallbacks: [scientific_name, class_code]
+  write_geojson: false
+  write_coco: true
+  use_label_aggregations: true
+
+logging:
+  log_file: ./Output/logs/create_dataset.log
+  console_level: INFO
+  file_level: DEBUG
