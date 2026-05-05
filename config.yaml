@@ -1,33 +1,94 @@
-paths:
-  rgb_dir: ./RGB
-  dsm_dir: ./DSM
-  labels_dir: ./Labels
-  aoi_path: ./AOI/AOIs_project.gpkg
-  output_dir: ./Output
-  coco_dir: ./coco
-  label_aggregations: ./Labels/label_aggregations.gpkg
-  label_aggregations_layer: output
+# =============================================================================
+# Global configuration for the Tree Crown Segmentation project
+# Reproduction of Teng et al., ICLR 2025 ML4RS:
+#   "Assessing SAM for Tree Crown Instance Segmentation from Drone Imagery"
+#
+# All paths below are relative to the repository root (the directory that
+# contains this config.yaml). They can also be overridden by environment
+# variables — see src/utils/paths.py for details.
+#
+# Author: Lmague
+# =============================================================================
 
-tile:
-  size: 1024
+paths:
+  # Root of generated tiles and COCO annotations.
+  # Expected layout under data_root:
+  #   <data_root>/{train,val,test}/{RGB,DSM}/*.tif
+  #   <data_root>/coco/{train,val,test}.json
+  data_root: ./data
+
+  # SAM ViT-H checkpoint
+  # Download: wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+  sam_checkpoint: ./checkpoints/sam_vit_h_4b8939.pth
+
+  # SAM2 checkpoint (for DSMPrompter and SAM2 zero-shot inference)
+  # Download: wget https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large.pt -P checkpoints/
+  sam2_checkpoint: ./checkpoints/sam2.1_hiera_large.pt
+
+  # DINOv3 ViT-L/16 checkpoint pretrained on 493M satellite images
+  # See the DINOv3 project page for the download link
+  dino_checkpoint: ./checkpoints/dinov3_vitl16_pretrain_sat493m-eadcf0ff.pth
+
+dataset:
+  tile_size: 1024
+  num_classes: 7
+  train_images_estimate: 18746
   overlap_ratio: 0.5
   min_aoi_ratio: 0.2
   min_tree_ratio: 0.2
 
-processing:
-  splits: [train, val, test]
-  processes: 4
-  skip_existing: false
-  max_tiles_per_site: null  # set to an integer to cap tiles during dry-runs
-  site_whitelist: []        # e.g. ['cbblackburn1']
-  compression: lzw
-  label_field: species
-  label_fallbacks: [scientific_name, class_code]
-  write_geojson: false
-  write_coco: true
-  use_label_aggregations: true
+training:
+  # Default batch size (individual scripts may override per-model)
+  batch_size_default: 8
+  max_epochs: 100
+  early_stopping_patience: 10
+  eval_period_epochs: 2
 
-logging:
-  log_file: ./Output/logs/create_dataset.log
-  console_level: INFO
-  file_level: DEBUG
+  # Linear LR scaling for A40 (48GB): LR_new = LR_paper * (batch_new / batch_paper)
+  # Applied per-model in training scripts
+
+  # Mask R-CNN RGB (batch 32 paper -> 8 A40)
+  mrcnn_rgb:
+    paper_batch: 32
+    a40_batch: 8
+    paper_lr: 0.0001
+    a40_lr: 0.000025
+    optimizer: SGD
+    momentum: 0.9
+    weight_decay: 0.0005
+
+  # Mask R-CNN RGB+DSM (batch 8 paper -> 4 A40)
+  mrcnn_rgb_dsm:
+    paper_batch: 8
+    a40_batch: 4
+    paper_lr: 0.0001
+    a40_lr: 0.00005
+    optimizer: SGD
+    momentum: 0.9
+    weight_decay: 0.0005
+
+  # Faster R-CNN (batch 32 paper -> 8 A40)
+  faster_rcnn:
+    paper_batch: 32
+    a40_batch: 8
+    paper_lr: 0.0001
+    a40_lr: 0.000025
+    optimizer: Adam
+    betas: [0.9, 0.999]
+    weight_decay: 0.0005
+
+  # RSPrompter / DSMPrompter (batch 2 paper == A40)
+  rsprompter:
+    batch: 2
+    lr: 0.00001
+    optimizer: AdamW
+    weight_decay: 0.1
+
+  # DINOv3 + Mask R-CNN (batch 8 paper -> 4 A40)
+  dino_maskrcnn:
+    paper_batch: 8
+    a40_batch: 4
+    paper_lr: 0.0005
+    a40_lr: 0.0005  # backbone frozen, so LR stays the same
+    optimizer: AdamW
+    weight_decay: 0.05

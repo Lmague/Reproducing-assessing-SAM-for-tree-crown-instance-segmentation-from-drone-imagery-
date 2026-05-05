@@ -1,0 +1,49 @@
+# ── Résultats d'entraînement (checkpoints, TFEvents, prédictions) ──────────────
+Résulats post training/
+
+# Prédictions brutes des modèles (fichiers JSON volumineux)
+src/models/*_predictions.json
+
+# Dataset COCO complet (trop lourd sans les images)
+test.json
+
+# ── Python ──────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Jupyter ──────────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── Checkpoints de modèles (à télécharger séparément) ────────────────────────
+*.pth
+*.pt
+*.bin
+*.pkl
+checkpoints/
+
+# ── Données (images, tuiles — non versionnées) ────────────────────────────────
+Output/
+sam_embeddings_vith/
+
+# ── Environnements virtuels ──────────────────────────────────────────────────
+venv/
+env/
+.env
+.venv/
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

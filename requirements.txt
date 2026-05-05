@@ -1,0 +1,52 @@
+# Core DL framework
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
+
+# Detectron2 (Facebook Research)
+# git+ required because detectron2 has no official PyPI release
+git+https://github.com/facebookresearch/detectron2.git@main#egg=detectron2
+
+# SAM (Segment Anything) - Facebook Research
+# git+ required because segment-anything has no official PyPI release
+git+https://github.com/facebookresearch/segment-anything.git#egg=segment-anything
+
+# SAM2 - Facebook Research
+# git+ required because sam2 has no official PyPI release
+git+https://github.com/facebookresearch/sam2.git#egg=sam2
+
+# Image / geometry processing
+opencv-python==4.9.0.80
+Pillow==10.2.0
+scipy==1.12.0
+matplotlib==3.8.2
+numpy==1.26.3
+
+# COCO evaluation
+pycocotools==2.0.7
+
+# Geospatial
+rasterio==1.3.9
+geopandas==0.14.3
+shapely==2.0.3
+fiona==1.9.6
+affine==2.4.0
+
+# Tiling pipeline
+sahi==0.11.15
+
+# Backbone utilities
+timm==0.9.16
+
+# Config
+PyYAML==6.0.1
+
+# Progress bars
+tqdm==4.66.1
+
+# BitsAndBytes (for SAM3 HF experimental inference only)
+bitsandbytes==0.43.1
+accelerate==0.28.0
+
+# For tiles_generator / create_dataset
+fvcore==0.1.5.post20231206
