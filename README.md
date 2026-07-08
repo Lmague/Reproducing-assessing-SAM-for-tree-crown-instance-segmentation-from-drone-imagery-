@@ -201,6 +201,6 @@ jupyter notebook notebooks/cpu_tests.ipynb
 
 ## Original paper & Dataset
 
-Lefebvre, I., & Laliberté, E. (2024). UAV LiDAR, UAV Imagery, Tree Segmentations and Ground Mesurements for Estimating Tree Biomass in Canadian (Quebec) Plantations [Jeu de données]. Federated Research Data Repository / dépôt fédéré de données de recherche. https://doi.org/10.20383/103.0979
-Teng, M., Ouaknine, A., Laliberté, E., Bengio, Y., Rolnick, D., & Larochelle, H. (2025, mars 26). Assessing SAM for Tree Crown Instance Segmentation from Drone Imagery. ICLR 2025 ML4RS workshop. https://doi.org/10.48550/arXiv.2503.20199
+- Lefebvre, I., & Laliberté, E. (2024). UAV LiDAR, UAV Imagery, Tree Segmentations and Ground Mesurements for Estimating Tree Biomass in Canadian (Quebec) Plantations [Jeu de données]. Federated Research Data Repository / dépôt fédéré de données de recherche. https://doi.org/10.20383/103.0979
+- Teng, M., Ouaknine, A., Laliberté, E., Bengio, Y., Rolnick, D., & Larochelle, H. (2025, mars 26). Assessing SAM for Tree Crown Instance Segmentation from Drone Imagery. ICLR 2025 ML4RS workshop. https://doi.org/10.48550/arXiv.2503.20199
 
