@@ -199,11 +199,8 @@ jupyter notebook notebooks/cpu_tests.ipynb
 
 ---
 
-## Acknowledgments
+## Original paper & Dataset
 
-- Teng et al. 2025 — original paper
-- [Segment Anything (SAM)](https://github.com/facebookresearch/segment-anything) — Meta AI
-- [SAM2](https://github.com/facebookresearch/sam2) — Meta AI
-- [Detectron2](https://github.com/facebookresearch/detectron2) — Meta AI
-- [DINOv2](https://github.com/facebookresearch/dinov2) — Meta AI
-- [UAV Quebec Plantations dataset](https://github.com/etiennelaberge/uav-quebec-plantations)
+Lefebvre, I., & Laliberté, E. (2024). UAV LiDAR, UAV Imagery, Tree Segmentations and Ground Mesurements for Estimating Tree Biomass in Canadian (Quebec) Plantations [Jeu de données]. Federated Research Data Repository / dépôt fédéré de données de recherche. https://doi.org/10.20383/103.0979
+Teng, M., Ouaknine, A., Laliberté, E., Bengio, Y., Rolnick, D., & Larochelle, H. (2025, mars 26). Assessing SAM for Tree Crown Instance Segmentation from Drone Imagery. ICLR 2025 ML4RS workshop. https://doi.org/10.48550/arXiv.2503.20199
+
