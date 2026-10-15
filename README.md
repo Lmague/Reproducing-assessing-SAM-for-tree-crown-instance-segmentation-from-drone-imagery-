@@ -27,13 +27,13 @@ All metrics are multiplied by 100. **mAP tree** = COCO AP[0.5:0.95] with all cla
 | **Mask R-CNN + SAM** | **52.97** | **72.94** | 48.76 | 49.67 | 57.60 ±0.19 |
 | Mask R-CNN RGB | 51.70 | 73.24 | 49.30 | 49.88 | 63.65 ±0.43 |
 | Mask R-CNN RGB+DSM | 39.73 | 64.09 | 36.08 | 37.35 | 64.64 ±0.69 |
-| SAM OTB (pps=10) | 17.54 | 66.24 | n/a | n/a | 10.11 |
-| SAM OTB (pps=5) | 14.56 | 52.79 | n/a | n/a | n/a |
-| SAM OTB (pps=3) | 6.51 | 31.06 | n/a | n/a | n/a |
-| SAM + DSM prompts | 15.25 | 57.48 | n/a | n/a | 9.28 |
+| SAM OTB (pps=10) | 17.54 | 66.24 | – | – | 10.11 |
+| SAM OTB (pps=5) | 14.56 | 52.79 | – | – | – |
+| SAM OTB (pps=3) | 6.51 | 31.06 | – | – | – |
+| SAM + DSM prompts | 15.25 | 57.48 | – | – | 9.28 |
 | Faster R-CNN + SAM | 2.86 | 12.66 | 0.49 | 0.95 | 57.85 ±0.66 |
-| RSPrompter | n/a | n/a | n/a | n/a | 66.37 ±0.91 |
-| DSMPrompter | n/a | n/a | n/a | n/a | 65.03 ±1.76 |
+| RSPrompter | – | – | – | – | 66.37 ±0.91 |
+| DSMPrompter | – | – | – | – | 65.03 ±1.76 |
 
 > **Faster R-CNN** didn't converge during training (standalone mAP tree = 0.06%), so Faster R-CNN + SAM is bad too: SAM can't fix bad detections.
 >
