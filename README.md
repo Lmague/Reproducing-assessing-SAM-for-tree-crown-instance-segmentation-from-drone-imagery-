@@ -1,8 +1,8 @@
-# Tree Crown Instance Segmentation — SAM, SAM2, Mask R-CNN & DINOv3
+# Tree Crown Instance Segmentation: SAM, SAM2, Mask R-CNN & DINOv3
 
-Master's side project — reproduction and extension of Teng et al., ICLR 2025 ML4RS, on the UAV Canadian Quebec Plantations dataset.
+Master's side project. I reproduce and extend Teng et al., ICLR 2025 ML4RS, on the UAV Canadian Quebec Plantations dataset.
 
-The paper benchmarks SAM variants and Mask R-CNN for individual tree crown instance segmentation from drone imagery, optionally using DSM (elevation data) as an extra input. I reproduced most of it and added a few things (SAM2, SAM3, DINOv3).
+The paper compares several SAM variants and Mask R-CNN for individual tree crown instance segmentation from drone images, optionally using DSM (elevation data) as an extra input. I reproduced most of it and added a few things (SAM2, SAM3, DINOv3).
 
 ---
 
@@ -12,13 +12,13 @@ The paper benchmarks SAM variants and Mask R-CNN for individual tree crown insta
 |---|---|
 | **From the paper** | SAM zero-shot, SAM + DSM prompts, Mask R-CNN RGB, Mask R-CNN + DSM, Faster R-CNN + SAM, Mask R-CNN + SAM |
 | **Added** | SAM2 zero-shot, SAM3 zero-shot, DINOv3 ViT-Large backbone + FPN |
-| **Implemented but not trained** | RSPrompter, DSMPrompter — the code is there but I didn't have enough GPU to actually train them (they require fine-tuning SAM end-to-end) |
+| **Implemented but not trained** | RSPrompter, DSMPrompter: the code is there but I didn't have enough GPU to train them (they need fine-tuning SAM end-to-end) |
 
 ---
 
 ## Results
 
-All metrics × 100. **mAP tree** = COCO AP[0.5:0.95] with everything collapsed to one "tree" class. **mIoU** = for each ground truth tree, take the prediction with best overlap and average. Full numbers in [`metrics_summary.json`](metrics_summary.json).
+All metrics are multiplied by 100. **mAP tree** = COCO AP[0.5:0.95] with all classes merged into one "tree" class. **mIoU** = for each ground truth tree, take the prediction with the best overlap and average. Full numbers in [`metrics_summary.json`](metrics_summary.json).
 
 ### Models from the paper
 
@@ -27,19 +27,19 @@ All metrics × 100. **mAP tree** = COCO AP[0.5:0.95] with everything collapsed t
 | **Mask R-CNN + SAM** | **52.97** | **72.94** | 48.76 | 49.67 | 57.60 ±0.19 |
 | Mask R-CNN RGB | 51.70 | 73.24 | 49.30 | 49.88 | 63.65 ±0.43 |
 | Mask R-CNN RGB+DSM | 39.73 | 64.09 | 36.08 | 37.35 | 64.64 ±0.69 |
-| SAM OTB (pps=10) | 17.54 | 66.24 | – | – | 10.11 |
-| SAM OTB (pps=5) | 14.56 | 52.79 | – | – | – |
-| SAM OTB (pps=3) | 6.51 | 31.06 | – | – | – |
-| SAM + DSM prompts | 15.25 | 57.48 | – | – | 9.28 |
+| SAM OTB (pps=10) | 17.54 | 66.24 | n/a | n/a | 10.11 |
+| SAM OTB (pps=5) | 14.56 | 52.79 | n/a | n/a | n/a |
+| SAM OTB (pps=3) | 6.51 | 31.06 | n/a | n/a | n/a |
+| SAM + DSM prompts | 15.25 | 57.48 | n/a | n/a | 9.28 |
 | Faster R-CNN + SAM | 2.86 | 12.66 | 0.49 | 0.95 | 57.85 ±0.66 |
-| RSPrompter | — | — | — | — | 66.37 ±0.91 |
-| DSMPrompter | — | — | — | — | 65.03 ±1.76 |
+| RSPrompter | n/a | n/a | n/a | n/a | 66.37 ±0.91 |
+| DSMPrompter | n/a | n/a | n/a | n/a | 65.03 ±1.76 |
 
-> **Faster R-CNN** didn't converge during training (standalone mAP tree = 0.06%), so Faster R-CNN + SAM is also bad as a result — SAM can't compensate for bad detections.
+> **Faster R-CNN** didn't converge during training (standalone mAP tree = 0.06%), so Faster R-CNN + SAM is bad too: SAM can't fix bad detections.
 >
-> The paper averages results over 3 seeds, mine are single runs, which explains part of the gap.
+> The paper averages its results over 3 seeds, mine are single runs, which explains part of the gap.
 
-### Original contributions
+### What I added
 
 | Model | mAP (tree) | mIoU |
 |-------|-----------|------|
@@ -52,7 +52,7 @@ All metrics × 100. **mAP tree** = COCO AP[0.5:0.95] with everything collapsed t
 
 SAM2 beats SAM zero-shot on both metrics (22.43 vs 17.54 mAP tree).
 
-DINOv3 results are very low — training didn't converge properly. One likely reason: the checkpoint I used (`dinov3_vitl16_pretrain_sat493m-eadcf0ff.pth`) is pretrained on **satellite images**, not drone images. Satellite and drone are quite different domains: satellite imagery is low resolution (meters/pixel), taken from much higher altitude, often multispectral — while drone data here is ~5mm/pixel RGB at low altitude. Features learned on satellite data probably don't transfer well to this scale.
+DINOv3 results are very low, training didn't converge properly. One likely reason: the checkpoint I used (`dinov3_vitl16_pretrain_sat493m-eadcf0ff.pth`) is pretrained on **satellite images**, not drone images. The two are quite different: satellite images are low resolution (meters/pixel), taken from a much higher altitude and often multispectral, while the drone data here is ~5mm/pixel RGB at low altitude. Features learned on satellite images probably don't transfer well to this scale.
 
 ### Per-class AP
 
@@ -74,7 +74,7 @@ DINOv3 results are very low — training didn't converge properly. One likely re
 pip install -r requirements.txt
 ```
 
-Download checkpoints into the `checkpoints/` directory at the repository root:
+Download the checkpoints into the `checkpoints/` directory at the repository root:
 
 ```bash
 mkdir -p checkpoints
@@ -91,7 +91,7 @@ wget https://dl.fbaipublicfiles.com/segment_anything_2/092824/sam2.1_hiera_large
 
 ### Configuring paths
 
-All paths are centralized in [`config.yaml`](config.yaml) and resolved by [`src/utils/paths.py`](src/utils/paths.py). Defaults assume the layout below (everything relative to the repo root). You can override any path either by editing `config.yaml` or via environment variables:
+All paths live in [`config.yaml`](config.yaml) and are read by [`src/utils/paths.py`](src/utils/paths.py). The defaults assume the layout below (relative to the repo root). You can override any path by editing `config.yaml` or with environment variables:
 
 ```bash
 export TREE_SEG_DATA_ROOT=/path/to/tiles
@@ -104,9 +104,9 @@ export TREE_SEG_DINO_CHECKPOINT=/path/to/dinov3_vitl16_pretrain_sat493m-eadcf0ff
 
 ## Dataset
 
-UAV Canadian Quebec Plantations dataset — RGB orthomosaics + DSM at ~5mm/pixel, 7 tree species + "others" class, 15 plantation sites.
+The UAV Canadian Quebec Plantations dataset: RGB orthomosaics + DSM at ~5mm/pixel, 7 tree species plus an "others" class, and 15 plantation sites.
 
-Generate 1024×1024 tiles from raw data:
+Generate 1024×1024 tiles from the raw data:
 
 ```bash
 python src/utils/tiles_generator.py --config config.yaml
@@ -134,12 +134,12 @@ python src/models/Mask_RCNN_RGB_DSM.py    # Mask R-CNN + DSM (4-channel input)
 python src/training/train_dino.py         # DINOv3 + Mask R-CNN
 ```
 
-Mask R-CNN + SAM uses the Mask R-CNN checkpoint — train it first, then:
+Mask R-CNN + SAM uses the Mask R-CNN checkpoint, so train that first, then:
 ```bash
 python src/models/Mask_RCNN_SAM.py
 ```
 
-RSPrompter needs SAM embeddings pre-computed first:
+RSPrompter needs the SAM embeddings pre-computed first:
 ```bash
 python src/misc/Pre_Compute_SAM.py   # takes a while, needs the SAM checkpoint
 python src/models/RSPrompter.py
@@ -192,10 +192,10 @@ jupyter notebook notebooks/cpu_tests.ipynb
 
 ## Notes
 
-- **LR scaling**: batch sizes are lower than in the paper due to GPU constraints, LR is scaled accordingly: `LR = LR_paper × (batch / batch_paper)`
-- **Early stopping**: Mask R-CNN training stops if val mAP doesn't improve for 10 consecutive evaluations
-- **RSPrompter / DSMPrompter**: implemented but not trained — these are the paper's best models but require fine-tuning SAM end-to-end which I couldn't run
-- **SAM3**: experimental — `src/models/SAM3_OTB.py` is provided for reference but needs a HuggingFace checkpoint that isn't publicly available yet
+- **LR scaling**: batch sizes are lower than in the paper because of my GPU, so the LR is scaled accordingly: `LR = LR_paper × (batch / batch_paper)`
+- **Early stopping**: Mask R-CNN training stops if the validation mAP doesn't improve for 10 evaluations in a row
+- **RSPrompter / DSMPrompter**: implemented but not trained. They are the paper's best models but need fine-tuning SAM end-to-end, which I couldn't run
+- **SAM3**: experimental. `src/models/SAM3_OTB.py` is there for reference but needs a HuggingFace checkpoint that isn't public yet
 
 ---
 
@@ -203,4 +203,3 @@ jupyter notebook notebooks/cpu_tests.ipynb
 
 - Lefebvre, I., & Laliberté, E. (2024). UAV LiDAR, UAV Imagery, Tree Segmentations and Ground Mesurements for Estimating Tree Biomass in Canadian (Quebec) Plantations [Jeu de données]. Federated Research Data Repository / dépôt fédéré de données de recherche. https://doi.org/10.20383/103.0979
 - Teng, M., Ouaknine, A., Laliberté, E., Bengio, Y., Rolnick, D., & Larochelle, H. (2025, mars 26). Assessing SAM for Tree Crown Instance Segmentation from Drone Imagery. ICLR 2025 ML4RS workshop. https://doi.org/10.48550/arXiv.2503.20199
-
